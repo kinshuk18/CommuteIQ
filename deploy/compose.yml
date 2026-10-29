@@ -1,0 +1,190 @@
+version: "3.9"
+
+# ── CommuteIQ — Docker Compose ────────────────────────────────────────────────
+# Profile usage:
+#   default           : postgres + redis + kafka + gateway + ai + web
+#   --profile weaviate: also starts the Weaviate vector store
+#
+# Quick start:
+#   docker compose up -d
+#
+# Phase 2 verification (postgres only):
+#   docker compose up -d postgres
+#   docker compose exec postgres psql -U commuteiq -d commuteiq -c "\dt"
+
+services:
+
+  # ── Postgres ────────────────────────────────────────────────────────────────
+  postgres:
+    image: postgres:16.6-alpine
+    container_name: commuteiq-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: commuteiq
+      POSTGRES_USER: commuteiq
+      POSTGRES_PASSWORD: commuteiq
+    ports:
+      - "5434:5432"   # host 5434 avoids clash with any local postgres
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U commuteiq -d commuteiq"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # ── Redis ───────────────────────────────────────────────────────────────────
+  redis:
+    image: redis:7.4.1-alpine
+    container_name: commuteiq-redis
+    restart: unless-stopped
+    command: redis-server --save "" --appendonly no
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # ── Kafka (KRaft, single node, no ZooKeeper) ────────────────────────────────
+  kafka:
+    image: apache/kafka:3.8.0
+    container_name: commuteiq-kafka
+    restart: unless-stopped
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      CLUSTER_ID: "MkU3OEVBNTcwNTJENDM2Qk"
+    ports:
+      - "9092:9092"
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list"]
+      interval: 10s
+      timeout: 10s
+      retries: 15
+      start_period: 30s
+
+  # ── AI Service (FastAPI) ────────────────────────────────────────────────────
+  ai:
+    build:
+      context: ./services/ai
+      dockerfile: Dockerfile
+    container_name: commuteiq-ai
+    restart: unless-stopped
+    environment:
+      DB_URL: "host=postgres port=5432 dbname=commuteiq user=commuteiq password=commuteiq"
+      REDIS_URL: redis://redis:6379
+      KAFKA_BOOTSTRAP: kafka:9092
+      KAFKA_ENABLED: "true"
+      LLM_BASE_URL: ${LLM_BASE_URL:-https://generativelanguage.googleapis.com/v1beta/openai/}
+      LLM_MODEL: ${LLM_MODEL:-gemini-2.0-flash}
+      LLM_API_KEY: ${LLM_API_KEY:-}
+      AI_SHARED_SECRET: ${AI_SHARED_SECRET:-changeme-dev-secret}
+      MLFLOW_TRACKING_URI: /app/mlruns
+      FAISS_INDEX_PATH: /app/faiss_index
+      LOG_LEVEL: INFO
+    ports:
+      - "8001:8001"
+    volumes:
+      - ai_mlruns:/app/mlruns
+      - ai_faiss:/app/faiss_index
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8001/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  # ── Gateway (Spring Boot) ───────────────────────────────────────────────────
+  gateway:
+    build:
+      context: ./services/gateway
+      dockerfile: Dockerfile
+    container_name: commuteiq-gateway
+    restart: unless-stopped
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/commuteiq
+      SPRING_DATASOURCE_USERNAME: commuteiq
+      SPRING_DATASOURCE_PASSWORD: commuteiq
+      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_PORT: 6379
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      KAFKA_ENABLED: "true"
+      AI_SERVICE_URL: http://ai:8001
+      AI_SHARED_SECRET: ${AI_SHARED_SECRET:-changeme-dev-secret}
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: health,info,prometheus,metrics
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      ai:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8080/actuator/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 40s
+
+  # ── Web (React / Nginx) ─────────────────────────────────────────────────────
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    container_name: commuteiq-web
+    restart: unless-stopped
+    environment:
+      VITE_GATEWAY_URL: ${VITE_GATEWAY_URL:-http://localhost:8080}
+    ports:
+      - "3000:80"
+    depends_on:
+      gateway:
+        condition: service_healthy
+
+  # ── Weaviate (optional profile) ─────────────────────────────────────────────
+  weaviate:
+    image: semitechnologies/weaviate:1.25.4
+    container_name: commuteiq-weaviate
+    restart: unless-stopped
+    profiles: ["weaviate"]
+    environment:
+      QUERY_DEFAULTS_LIMIT: 25
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: "true"
+      PERSISTENCE_DATA_PATH: /var/lib/weaviate
+      DEFAULT_VECTORIZER_MODULE: none
+      ENABLE_MODULES: ""
+      CLUSTER_HOSTNAME: node1
+    ports:
+      - "8888:8080"
+    volumes:
+      - weaviate_data:/var/lib/weaviate
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8080/v1/.well-known/ready || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+
+volumes:
+  pg_data:
+  ai_mlruns:
+  ai_faiss:
+  weaviate_data:
