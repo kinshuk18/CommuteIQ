@@ -46,11 +46,8 @@ CommuteIQ is a hybrid-work commute copilot for Bengaluru combining BMTC bus + Na
 
 ---
 
-## Current Step Details (Phase 3)
-- **Status:** Building FastAPI ai-service skeleton with `/health`, `/metrics`, custom GTFS router (Dijkstra/RAPTOR-lite), ML regressor + MLflow.
-- **Blockers:** None.
-- **Next Command to Resume:**
-  ```
-  cd "/home/kinshuk-gupta/KINSHUK GUPTA/Mini Project/CommuteIQ"
-  # Phase 3 execution — ai service core
-  ```
+## Current Step Details (Phase 3 Completed)
+- **Done:** Python 3.11 environment with uv, GTFSRouter with spatial index + LRU cache passing 10 unit tests, GBR inter-stop scheduled running time model trained & registered in MLflow (`runtime-regressor` v1), FastAPI routes `/health`, `/metrics`, `/plan`, `/ml/predict-runtime`, and fixed Java 21 wrapper `mvnw`.
+- **Next:** Phase 4 — RAG + Agent (LLM strategy/factory, LlamaIndex ingestion over real docs, LangGraph multi-node workflow, ContextBuilder with verified vs unverified context, and `/ask` endpoint).
+- **Blockers:** Free Gemini/OpenAI API key needed for live LLM integration in Phase 4.
+- **Resume Command:** `cd "/home/kinshuk-gupta/KINSHUK GUPTA/Mini Project/CommuteIQ" && source .venv/bin/activate`
