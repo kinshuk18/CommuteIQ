@@ -1,0 +1,141 @@
+{
+  "bmtc_gtfs.zip": {
+    "sha256": "d63f803bf5d6257c5b3d3b9ede6a7b5ea3dd3d64fc661bf5ade3c7ecd55f7099",
+    "bytes": 302645
+  },
+  "bmrcl_gtfs.zip": {
+    "sha256": "c19f56f32ad53525c71191125409dc8dded12dd2cebfc576ad9a4db23a62b8a7",
+    "bytes": 2369725
+  },
+  "offices.json": {
+    "sha256": "7653b403a468222f5f16e9e6aa4646b624c7781446b987b225b010a547d40f31",
+    "bytes": 54255,
+    "count": 284
+  },
+  "docs/bmrcl-fare-rules": {
+    "sha256": "989681ac6b6a1b950efbf28c8b58e291fe5aab12f3c062d8edbfc5b171058bc2",
+    "bytes": 53762,
+    "words": 1526,
+    "trust_tier": "VERIFIED",
+    "url": "https://www.bmrc.co.in/fare-rules/"
+  },
+  "docs/bmrcl-tickets-smartcard": {
+    "sha256": "73f93ce99a01a62c331d53a9e6def36a01449b41c34c5499750ac85f5a1679e0",
+    "bytes": 52365,
+    "words": 1126,
+    "trust_tier": "VERIFIED",
+    "url": "https://www.bmrc.co.in/tickets/"
+  },
+  "docs/bmrcl-commuter-faq": {
+    "sha256": "363e9742ec88b0724fd1d2c111b69f0c535e333f45e82fa6f88414841847b0c5",
+    "bytes": 57743,
+    "words": 1155,
+    "trust_tier": "VERIFIED",
+    "url": "https://www.bmrc.co.in/bmrcl-faq/"
+  },
+  "docs/bmtc-bus-fares": {
+    "sha256": "b6d380960ebe0a5bed317f669b227367208a86eb3b0497221d1ea7dc13c61c70",
+    "bytes": 254244,
+    "words": 504,
+    "trust_tier": "VERIFIED",
+    "url": "https://mybmtc.karnataka.gov.in/info-4/Bus+Fares/en"
+  },
+  "docs/bmtc-commuter-passes": {
+    "sha256": "b6d380960ebe0a5bed317f669b227367208a86eb3b0497221d1ea7dc13c61c70",
+    "bytes": 254244,
+    "words": 504,
+    "trust_tier": "VERIFIED",
+    "url": "https://mybmtc.karnataka.gov.in/info-4/Passes/en"
+  },
+  "docs/bmtc-rules-regulations": {
+    "sha256": "b6d380960ebe0a5bed317f669b227367208a86eb3b0497221d1ea7dc13c61c70",
+    "bytes": 254244,
+    "words": 504,
+    "trust_tier": "VERIFIED",
+    "url": "https://mybmtc.karnataka.gov.in/info-2/Rules+and+Regulations/en"
+  },
+  "docs/karnataka-transport-fare-fixation": {
+    "sha256": "3b4a4cce9a8985ad12439d7661be40922438bde3e2898a6f22ea490165a5f325",
+    "bytes": 363425,
+    "words": 3335,
+    "trust_tier": "VERIFIED",
+    "url": "https://transport.karnataka.gov.in/page/Fare+Fixation/en"
+  },
+  "docs/karnataka-motor-vehicles-rules": {
+    "sha256": "2412b80e379880c2b83453d4ffc1755bb730912c149d632ff0ffe439313efdc7",
+    "bytes": 363425,
+    "words": 3335,
+    "trust_tier": "VERIFIED",
+    "url": "https://transport.karnataka.gov.in/page/Acts+and+Rules/en"
+  },
+  "docs/dult-urban-mobility-policy": {
+    "sha256": "c84b716bbe52d2ae7769cd75e8ed2099d32184965e1b0f8ab2c41537adf90bd4",
+    "bytes": 94632,
+    "words": 105,
+    "trust_tier": "VERIFIED",
+    "url": "https://dult.karnataka.gov.in/page/Policies+and+Acts/en"
+  },
+  "docs/news-toi-taxi-rewrite": {
+    "sha256": "6006d68fe0811277212b46462e420ca82ec7cd623b08e45fb7e75561f643d4e7",
+    "bytes": 323805,
+    "words": 273,
+    "trust_tier": "UNVERIFIED",
+    "url": "https://timesofindia.indiatimes.com/city/bengaluru/10-years-on-karnataka-transport-department-set-to-rewrite-taxi-aggregator-rules/articleshow/134623153.cms"
+  },
+  "docs/news-hindu-advance-tipping": {
+    "sha256": "82871038b4c1fabb8f5c5c3cdf7f210518efbdc71430b40536424b2534ea269f",
+    "bytes": 216042,
+    "words": 1610,
+    "trust_tier": "UNVERIFIED",
+    "url": "https://www.thehindu.com/news/national/karnataka/bengaluru-passengers-welcome-government-move-against-advance-tipping-drivers-seek-fairer-fares/article71480998.ece"
+  },
+  "docs/news-hindu-surge-action": {
+    "sha256": "c336f24d048b47b025d922e45b67aae406f8cf45a5c157fb402c371fe2c9e6f1",
+    "bytes": 217288,
+    "words": 1716,
+    "trust_tier": "UNVERIFIED",
+    "url": "https://www.thehindu.com/news/national/karnataka/bengaluru-commuters-seek-action-over-surge-pricing-by-cab-auto-aggregators/article71496092.ece"
+  },
+  "docs/news-ie-uniform-rates": {
+    "sha256": "dc5eb1421710c969034e74814727b4d39c669f675558e4b1e4d572227e61a610",
+    "bytes": 769239,
+    "words": 1748,
+    "trust_tier": "UNVERIFIED",
+    "url": "https://indianexpress.com/article/cities/bangalore/bengaluru-cabs-revised-uniform-rates-ride-hailing-9150111/"
+  },
+  "docs/blog-blrmetro-fares": {
+    "sha256": "dd20ad15a242bab3baee9be54f9be03104bd75ac849a23a7f2bc204e9e20f31e",
+    "bytes": 6544,
+    "words": 429,
+    "trust_tier": "UNVERIFIED",
+    "url": "https://blrmetro.com/namma-metro-fares-tickets.html"
+  },
+  "docs/blog-bengalurumetro-chart": {
+    "sha256": "6b48357956089ed9e91091aa62fd4b16aff285fbcad2924e29d8572a07bc7bf1",
+    "bytes": 41133,
+    "words": 894,
+    "trust_tier": "UNVERIFIED",
+    "url": "https://bengalurumetro.in/bangalore-metro-fare-chart.html"
+  },
+  "docs/morth-aggregator-2020": {
+    "sha256": "65b1cb775cbd290d39f0f8ab991441dba0b42be27c9d4913e2d176f6ffc3e99f",
+    "bytes": 40934,
+    "words": 9,
+    "trust_tier": "VERIFIED",
+    "url": "https://morth.nic.in/motor-vehicles-aggregator-guidelines-2020"
+  },
+  "docs/news-hindu-overcharging": {
+    "sha256": "00a0326c2baecd63e34d9d4d4d696bef4eb9aca53d88fce76ada47349e3ee075",
+    "bytes": 220702,
+    "words": 1690,
+    "trust_tier": "UNVERIFIED",
+    "url": "https://www.thehindu.com/news/cities/bangalore/passengers-complain-of-continued-overcharging-by-cab-aggregators-despite-uniform-fare-structure/article68898915.ece"
+  },
+  "docs/morth-aggregator-2025": {
+    "sha256": "85e218e96d08dc359d3ee44106c5a4e288cca8f027ea125f85427365f2ce9789",
+    "bytes": 3590234,
+    "words": 14442,
+    "trust_tier": "VERIFIED",
+    "url": "https://avantiscdnprodstorage.blob.core.windows.net/legalupdatedocs/44140/Motor-Vehicles-Aggregator-Guidelines-2025-July022025.pdf"
+  }
+}

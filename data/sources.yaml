@@ -1,0 +1,147 @@
+# CommuteIQ Official Knowledge Base Sources
+# Strict two-tier corpus for context engineering:
+# - VERIFIED: Official government regulations, statutory transit authority rules, and gazette notifications
+# - UNVERIFIED: Reputable news coverage, investigative reports, and transit blog analyses
+
+sources:
+  # ==========================================
+  # VERIFIED TIER (Government & Transit Authorities)
+  # ==========================================
+  - id: morth-aggregator-2025
+    title: "MoRTH Motor Vehicles Aggregator Guidelines 2025 (Official Statutory Notification)"
+    url: "https://avantiscdnprodstorage.blob.core.windows.net/legalupdatedocs/44140/Motor-Vehicles-Aggregator-Guidelines-2025-July022025.pdf"
+    trust_tier: "VERIFIED"
+    authority: "Ministry of Road Transport and Highways (MoRTH), Government of India"
+    doc_type: "pdf"
+    description: "Statutory aggregator regulatory framework (July 2025) issued under Section 93 of Motor Vehicles Act, covering licensing validity (5 years), surge pricing caps, driver working hours limit, induction training (40 hours), passenger insurance, and EV fleet transition."
+
+  - id: bmrcl-fare-rules
+    title: "Namma Metro Fare Rules and Travel Regulations"
+    url: "https://www.bmrc.co.in/fare-rules/"
+    trust_tier: "VERIFIED"
+    authority: "Bangalore Metro Rail Corporation Limited (BMRCL)"
+    doc_type: "html"
+    description: "Official fare rules, distance-based slab calculations, peak vs non-peak discounts for smart card / QR ticket holders, mismatch gate exit penalties, and station overstay limitations."
+
+  - id: bmrcl-tickets-smartcard
+    title: "BMRCL Smart Card (Varshik), Tokens and NCMC Ticketing Structure"
+    url: "https://www.bmrc.co.in/tickets/"
+    trust_tier: "VERIFIED"
+    authority: "Bangalore Metro Rail Corporation Limited (BMRCL)"
+    doc_type: "html"
+    description: "Official ticketing guidelines, smart card minimum purchase and recharge parameters, National Common Mobility Card (NCMC) rules, and refund policies."
+
+  - id: bmrcl-commuter-faq
+    title: "Namma Metro Commuter Guidelines and Frequently Asked Questions"
+    url: "https://www.bmrc.co.in/bmrcl-faq/"
+    trust_tier: "VERIFIED"
+    authority: "Bangalore Metro Rail Corporation Limited (BMRCL)"
+    doc_type: "html"
+    description: "Operational guidelines including baggage limits, prohibited goods, child travel exemption (under 3 feet height), train operating hours, and lost luggage protocols."
+
+  - id: bmtc-bus-fares
+    title: "BMTC Ordinary and Vajra AC Bus Fare Structure"
+    url: "https://mybmtc.karnataka.gov.in/info-4/Bus+Fares/en"
+    trust_tier: "VERIFIED"
+    authority: "Bangalore Metropolitan Transport Corporation (BMTC)"
+    doc_type: "html"
+    description: "Official stage-wise fare slabs for general services, non-AC ordinary buses, and airport Vayu Vajra / IT corridor Vajra Volvo air-conditioned services."
+
+  - id: bmtc-commuter-passes
+    title: "BMTC Daily, Weekly, and Monthly Commuter Pass Guidelines"
+    url: "https://mybmtc.karnataka.gov.in/info-4/Passes/en"
+    trust_tier: "VERIFIED"
+    authority: "Bangalore Metropolitan Transport Corporation (BMTC)"
+    doc_type: "html"
+    description: "Rules regarding daily passes, monthly commuter passes, student concessions, digital bus pass issuance, and required valid identity documentation."
+
+  - id: bmtc-rules-regulations
+    title: "BMTC Passenger Regulations and Carriage Conditions"
+    url: "https://mybmtc.karnataka.gov.in/info-2/Rules+and+Regulations/en"
+    trust_tier: "VERIFIED"
+    authority: "Bangalore Metropolitan Transport Corporation (BMTC)"
+    doc_type: "html"
+    description: "Passenger carriage rights, ticketing inspection powers, luggage charge slabs, seat reservation norms, and passenger safety regulations."
+
+  - id: karnataka-transport-fare-fixation
+    title: "Karnataka Transport Department City Taxi and Cab Fare Fixation Order"
+    url: "https://transport.karnataka.gov.in/page/Fare+Fixation/en"
+    trust_tier: "VERIFIED"
+    authority: "Transport Department, Government of Karnataka"
+    doc_type: "html"
+    description: "Official notifications detailing vehicle cost-class classification (Class A, B, C, D), minimum flag-down distance fares, subsequent per-kilometer charges, and waiting fee rules."
+
+  - id: karnataka-motor-vehicles-rules
+    title: "Karnataka Motor Vehicles Rules & Aggregator Enforcement Framework"
+    url: "https://transport.karnataka.gov.in/page/Acts+and+Rules/en"
+    trust_tier: "VERIFIED"
+    authority: "Transport Department, Government of Karnataka"
+    doc_type: "html"
+    description: "State legal provisions governing on-demand transportation technology aggregators, inspection checkpoints, and vehicle fitness standards."
+
+  - id: dult-urban-mobility-policy
+    title: "DULT Comprehensive Mobility and Transit Integration Policy"
+    url: "https://dult.karnataka.gov.in/page/Policies+and+Acts/en"
+    trust_tier: "VERIFIED"
+    authority: "Directorate of Urban Land Transport (DULT), Karnataka"
+    doc_type: "html"
+    description: "Policy directives for multimodal integration, non-motorized transport (NMT) priority, feeder bus synchronization with metro corridors, and workspace commute management."
+
+  # ==========================================
+  # UNVERIFIED TIER (News Coverage & Transit Blogs)
+  # ==========================================
+  - id: news-toi-taxi-rewrite
+    title: "Karnataka Transport Department Set to Rewrite Taxi Aggregator Rules"
+    url: "https://timesofindia.indiatimes.com/city/bengaluru/10-years-on-karnataka-transport-department-set-to-rewrite-taxi-aggregator-rules/articleshow/134623153.cms"
+    trust_tier: "UNVERIFIED"
+    source: "The Times of India"
+    doc_type: "html"
+    description: "Analysis of regulatory efforts to replace the 2016 On-demand Transportation Technology Aggregator Rules, addressing platform compliance, driver revenue sharing, and consumer surge pricing disputes."
+
+  - id: news-hindu-overcharging
+    title: "Passengers Complain of Continued Overcharging by Cab Aggregators Despite Uniform Fare Structure"
+    url: "https://www.thehindu.com/news/cities/bangalore/passengers-complain-of-continued-overcharging-by-cab-aggregators-despite-uniform-fare-structure/article68898915.ece"
+    trust_tier: "UNVERIFIED"
+    source: "The Hindu"
+    doc_type: "html"
+    description: "Ground reporting on discrepancies between state-notified uniform cab fares and actual amounts charged via dynamic pricing during peak IT-corridor commute hours."
+
+  - id: news-hindu-advance-tipping
+    title: "Bengaluru Passengers Welcome Move Against Advance Tipping; Drivers Seek Fairer Fares"
+    url: "https://www.thehindu.com/news/national/karnataka/bengaluru-passengers-welcome-government-move-against-advance-tipping-drivers-seek-fairer-fares/article71480998.ece"
+    trust_tier: "UNVERIFIED"
+    source: "The Hindu"
+    doc_type: "html"
+    description: "Reporting on CCPA regulatory action regarding upfront tipping prompts on ride-hailing applications and driver perspectives on operating margins in Bengaluru traffic."
+
+  - id: news-hindu-surge-action
+    title: "Bengaluru Commuters Seek Action Over Surge Pricing by Cab and Auto Aggregators"
+    url: "https://www.thehindu.com/news/national/karnataka/bengaluru-commuters-seek-action-over-surge-pricing-by-cab-auto-aggregators/article71496092.ece"
+    trust_tier: "UNVERIFIED"
+    source: "The Hindu"
+    doc_type: "html"
+    description: "Public complaints regarding rain and peak hour surge multiples exceeding 2x on aggregators in Bengaluru outer ring road (ORR) and Whitefield corridors."
+
+  - id: news-ie-uniform-rates
+    title: "Bengaluru Cabs Revised Uniform Rates and Ride-Hailing Implementation"
+    url: "https://indianexpress.com/article/cities/bangalore/bengaluru-cabs-revised-uniform-rates-ride-hailing-9150111/"
+    trust_tier: "UNVERIFIED"
+    source: "The Indian Express"
+    doc_type: "html"
+    description: "Explainer breaking down the four vehicular cost slabs for app-based taxis, luggage exemptions, night charges (12:00 AM to 6:00 AM 10% surcharge), and RTO enforcement challenges."
+
+  - id: blog-blrmetro-fares
+    title: "Namma Metro Fares, Smart Card Discounts, and Ticketing Guide"
+    url: "https://blrmetro.com/namma-metro-fares-tickets.html"
+    trust_tier: "UNVERIFIED"
+    source: "BLRMetro Commuter Guide"
+    doc_type: "html"
+    description: "Independent commuter guide detailing metro token usage, QR code ticketing tips via WhatsApp, and interchange transfer station timings at Nadaprabhu Kempegowda Majestic."
+
+  - id: blog-bengalurumetro-chart
+    title: "Bangalore Metro Fare Chart and Operational Line Maps"
+    url: "https://bengalurumetro.in/bangalore-metro-fare-chart.html"
+    trust_tier: "UNVERIFIED"
+    source: "Bengaluru Metro Guide"
+    doc_type: "html"
+    description: "Independent timetable aggregation and fare calculation matrix between Purple Line and Green Line stations across Bengaluru."
