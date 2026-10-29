@@ -85,3 +85,20 @@ These documents provide real-world commuter context, ground reports on app prici
 ## 4. Integrity Verification
 
 Every file's raw payload is hashed via SHA-256 upon fetch and stored in `data/checksums.json`. The ingestion pipelines verify these hashes to prevent data tampering. Raw data files are retained locally and gitignored under `data/raw/` in compliance with token and repository hygiene guidelines.
+
+---
+
+## 5. Database Row Counts (Phase 2, measured via psql)
+
+Loaded into Docker Postgres 16.6-alpine via `data/scripts/load_gtfs.py` (psycopg3 COPY).
+Verification command: `docker exec commuteiq-postgres psql -U commuteiq -d commuteiq -c "SELECT ..."`
+
+| Table | Row Count | Notes |
+| :--- | ---: | :--- |
+| `stop` | 4,921 | BMTC 4,433 + BMRCL 488 |
+| `route` | 4,274 | BMTC 4,271 + BMRCL 3 |
+| `trip` | 18,449 | BMTC 15,170 + BMRCL 3,279 |
+| `stop_time` | 103,923 | BMTC 15,017 + BMRCL 88,906 |
+| `office` | 284 | OSM POIs |
+
+Agency breakdown confirmed via `GROUP BY agency` query on 2026-10-30.
