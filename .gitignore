@@ -20,6 +20,8 @@ mlruns/
 *.sqlite
 *.pkl
 vector_store/
+faiss_index/
+*.faiss
 
 # Java & Maven
 target/

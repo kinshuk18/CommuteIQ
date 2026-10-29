@@ -3,11 +3,16 @@ config.py — Centralised settings loaded from environment variables.
 Uses pydantic-settings so values can come from .env, Docker, or K8s secrets.
 """
 
+from pathlib import Path
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+_ROOT_ENV = Path(__file__).resolve().parent.parent.parent.parent / ".env"
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
+    model_config = SettingsConfigDict(
+        env_file=[str(_ROOT_ENV), ".env"], env_file_encoding="utf-8", extra="ignore"
+    )
 
     # Postgres
     db_url: str = "host=localhost port=5434 dbname=commuteiq user=commuteiq password=commuteiq"
@@ -20,11 +25,12 @@ class Settings(BaseSettings):
     kafka_enabled: bool = True
 
     # LLM (OpenAI-compatible endpoint — default: Gemini)
+    llm_provider: str = "openai_compat"
     llm_base_url: str = "https://generativelanguage.googleapis.com/v1beta/openai/"
-    llm_model: str = "gemini-2.0-flash"
+    llm_model: str = "gemini-3.8-flash"
     llm_api_key: str = ""
-    llm_timeout: int = 30
-    llm_max_retries: int = 2
+    llm_timeout: int = 5
+    llm_max_retries: int = 0
 
     # Anthropic (optional fallback)
     anthropic_api_key: str = ""

@@ -21,7 +21,8 @@ from app.config import settings
 from app.metrics import REQUEST_LATENCY, ACTIVE_REQUESTS
 from app.router import init_router, get_router
 from app.ml_model import RuntimePredictor, train_and_register
-from app.routes import plan, ml
+from app.rag.vector_store import get_vector_backend
+from app.routes import plan, ml, ask, ingest
 
 logging.basicConfig(
     level=getattr(logging, settings.log_level.upper(), logging.INFO),
@@ -37,6 +38,8 @@ async def lifespan(app: FastAPI):
     init_router(settings.db_url)
     # Load ML model from MLflow registry (non-fatal if not yet registered)
     RuntimePredictor.load()
+    # Initialize vector backend (loads persisted index if available)
+    get_vector_backend()
     logger.info("AI service ready")
     yield
     logger.info("AI service shutting down")
@@ -96,3 +99,5 @@ async def metrics():
 
 app.include_router(plan.router, prefix="/plan", tags=["routing"])
 app.include_router(ml.router, prefix="/ml", tags=["ml"])
+app.include_router(ask.router, prefix="/ask", tags=["agent"])
+app.include_router(ingest.router, prefix="/ingest", tags=["rag"])
