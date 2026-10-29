@@ -16,6 +16,8 @@ __pycache__/
 .venv/
 venv/
 mlruns/
+*.db
+*.sqlite
 *.pkl
 vector_store/
 
