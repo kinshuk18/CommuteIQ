@@ -17,12 +17,15 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
 
+import asyncio
+
 from app.config import settings
 from app.metrics import REQUEST_LATENCY, ACTIVE_REQUESTS
 from app.router import init_router, get_router
 from app.ml_model import RuntimePredictor, train_and_register
 from app.rag.vector_store import get_vector_backend
 from app.routes import plan, ml, ask, ingest
+from app.consumer import run_consumer
 
 logging.basicConfig(
     level=getattr(logging, settings.log_level.upper(), logging.INFO),
@@ -41,7 +44,14 @@ async def lifespan(app: FastAPI):
     # Initialize vector backend (loads persisted index if available)
     get_vector_backend()
     logger.info("AI service ready")
+    # Start Kafka consumer as a background task (no-op if KAFKA_ENABLED=false)
+    consumer_task = asyncio.create_task(run_consumer())
     yield
+    consumer_task.cancel()
+    try:
+        await consumer_task
+    except asyncio.CancelledError:
+        pass
     logger.info("AI service shutting down")
 
 

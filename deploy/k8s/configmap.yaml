@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: commuteiq-config
+data:
+  SPRING_REDIS_HOST: redis-service
+  SPRING_REDIS_PORT: "6379"
+  KAFKA_BOOTSTRAP_SERVERS: kafka-service:9092
+  KAFKA_ENABLED: "true"
+  AI_SERVICE_URL: http://ai-service:8001
+  MLFLOW_TRACKING_URI: /app/mlruns
+  FAISS_INDEX_PATH: /app/faiss_index
+  LOG_LEVEL: INFO
+  LLM_BASE_URL: https://generativelanguage.googleapis.com/v1beta/openai/
+  LLM_MODEL: gemini-2.0-flash

@@ -212,24 +212,37 @@ def compose_node(state: AgentState) -> dict[str, Any]:
         llm = get_llm_client()
         answer = llm.complete(user_prompt, system=system_prompt, temperature=0.2)
     except Exception as exc:
-        logger.warning("Remote LLM unavailable (%s), synthesizing directly from verified facts", exc)
-        v_chunks = [c for c in state.get("retrieved_chunks", []) if c.get("trust_tier") == "VERIFIED"]
-        if v_chunks:
-            primary = v_chunks[0]
-            answer = (
-                f"Based on official regulations from {primary.get('authority', 'Bangalore Transit')} "
-                f"([{primary.get('citation_id', 1)}]): {primary.get('text', '')[:250]}..."
-            )
+        logger.warning("Remote LLM unavailable (%s), falling back to extractive answer", exc)
+        chunks = state.get("retrieved_chunks", [])
+        if chunks:
+            lines = ["LLM unavailable — extractive answer:"]
+            for idx, c in enumerate(chunks[:3], start=1):
+                c_id = c.get("citation_id", idx)
+                snip = (c.get("text") or "").strip()
+                if len(snip) > 280:
+                    snip = snip[:280] + "..."
+                tier = c.get("trust_tier", "UNVERIFIED")
+                title = c.get("title", "Transit Source")
+                lines.append(f'[{c_id}] "{snip}" ({title} — {tier})')
+            if state.get("plan"):
+                p = state["plan"]
+                dur = p.get("total_duration_sec", 0) // 60
+                lines.append(
+                    f"\nGTFS Route: {p.get('origin', {}).get('name')} → {p.get('destination', {}).get('name')}, "
+                    f"duration {dur} min, {p.get('vehicle_changes', 0)} transfer(s)."
+                )
+            answer = "\n\n".join(lines)
         elif state.get("plan"):
             p = state["plan"]
             dur = p.get("total_duration_sec", 0) // 60
             answer = (
+                f"LLM unavailable — extractive answer:\n\n"
                 f"Official GTFS route: {p.get('origin', {}).get('name')} to "
                 f"{p.get('destination', {}).get('name')}, duration {dur} minutes "
-                f"with {p.get('vehicle_changes', 0)} vehicle transfers. Ground truth from GTFS schedule."
+                f"with {p.get('vehicle_changes', 0)} vehicle transfers. (Ground truth from GTFS schedule)."
             )
         else:
-            answer = "Information retrieved from official Bangalore transit documents cited in references."
+            answer = "LLM unavailable — extractive answer: No matching transit documents or routes retrieved."
 
     return {"answer": answer}
 

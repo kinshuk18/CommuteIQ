@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ai
+  template:
+    metadata:
+      labels:
+        app: ai
+    spec:
+      containers:
+        - name: ai
+          image: commuteiq/ai:latest
+          ports:
+            - containerPort: 8001
+          envFrom:
+            - configMapRef:
+                name: commuteiq-config
+            - secretRef:
+                name: commuteiq-secrets
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+            limits:
+              memory: "1Gi"
+              cpu: "1000m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8001
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8001
+            initialDelaySeconds: 20
+            periodSeconds: 5
+          volumeMounts:
+            - name: faiss-data
+              mountPath: /app/faiss_index
+            - name: mlruns-data
+              mountPath: /app/mlruns
+      volumes:
+        - name: faiss-data
+          persistentVolumeClaim:
+            claimName: faiss-pvc
+        - name: mlruns-data
+          persistentVolumeClaim:
+            claimName: mlruns-pvc

@@ -1,0 +1,84 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  ai-tests:
+    name: AI Service (pytest)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/ai
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install CPU-only deps (no CUDA torch)
+        run: |
+          pip install --upgrade pip
+          pip install torch --index-url https://download.pytorch.org/whl/cpu
+          pip install -r requirements.txt
+
+      - name: Run pytest (LLM calls mocked via env)
+        env:
+          # Tests use TestClient + mock LLM; no real API key needed
+          LLM_PROVIDER: mock
+          LLM_API_KEY: test-key
+          GROQ_API_KEY: test-key
+          AI_SHARED_SECRET: test-secret
+          DB_URL: ""
+          MLFLOW_TRACKING_URI: /tmp/mlruns
+          FAISS_INDEX_PATH: /tmp/faiss_index
+        run: python -m pytest -q --tb=short
+
+  gateway-tests:
+    name: Gateway (Maven verify, JDK 21)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/gateway
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: "21"
+          distribution: temurin
+          cache: maven
+
+      - name: Run mvnw verify
+        run: ./mvnw -q verify
+
+  web-build:
+    name: Web (Vite build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build

@@ -35,6 +35,13 @@ class Settings(BaseSettings):
     # Anthropic (optional fallback)
     anthropic_api_key: str = ""
 
+    # Groq fallback
+    groq_api_key: str = ""
+    groq_model: str = "llama-3.3-70b-versatile"
+
+    # LLM Cache
+    llm_cache_path: str = "llm_cache.sqlite"
+
     # Shared secret with gateway
     ai_shared_secret: str = "changeme-dev-secret"
 

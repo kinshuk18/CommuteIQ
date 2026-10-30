@@ -6,11 +6,7 @@ version: "3.9"
 #   --profile weaviate: also starts the Weaviate vector store
 #
 # Quick start:
-#   docker compose up -d
-#
-# Phase 2 verification (postgres only):
-#   docker compose up -d postgres
-#   docker compose exec postgres psql -U commuteiq -d commuteiq -c "\dt"
+#   docker compose -f deploy/compose.yml up -d
 
 services:
 
@@ -40,7 +36,7 @@ services:
     restart: unless-stopped
     command: redis-server --save "" --appendonly no
     ports:
-      - "6379:6379"
+      - "6380:6379"
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
@@ -49,7 +45,7 @@ services:
 
   # ── Kafka (KRaft, single node, no ZooKeeper) ────────────────────────────────
   kafka:
-    image: apache/kafka:3.8.0
+    image: apache/kafka:3.7.0
     container_name: commuteiq-kafka
     restart: unless-stopped
     environment:
@@ -72,15 +68,17 @@ services:
       interval: 10s
       timeout: 10s
       retries: 15
-      start_period: 30s
+      start_period: 20s
 
   # ── AI Service (FastAPI) ────────────────────────────────────────────────────
   ai:
     build:
-      context: ./services/ai
+      context: ../services/ai
       dockerfile: Dockerfile
     container_name: commuteiq-ai
     restart: unless-stopped
+    env_file:
+      - ../.env
     environment:
       DB_URL: "host=postgres port=5432 dbname=commuteiq user=commuteiq password=commuteiq"
       REDIS_URL: redis://redis:6379
@@ -89,6 +87,7 @@ services:
       LLM_BASE_URL: ${LLM_BASE_URL:-https://generativelanguage.googleapis.com/v1beta/openai/}
       LLM_MODEL: ${LLM_MODEL:-gemini-2.0-flash}
       LLM_API_KEY: ${LLM_API_KEY:-}
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
       AI_SHARED_SECRET: ${AI_SHARED_SECRET:-changeme-dev-secret}
       MLFLOW_TRACKING_URI: /app/mlruns
       FAISS_INDEX_PATH: /app/faiss_index
@@ -104,7 +103,7 @@ services:
       redis:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "curl -sf http://localhost:8001/health || exit 1"]
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8001/health')\" || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -113,10 +112,12 @@ services:
   # ── Gateway (Spring Boot) ───────────────────────────────────────────────────
   gateway:
     build:
-      context: ./services/gateway
+      context: ../services/gateway
       dockerfile: Dockerfile
     container_name: commuteiq-gateway
     restart: unless-stopped
+    env_file:
+      - ../.env
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/commuteiq
       SPRING_DATASOURCE_USERNAME: commuteiq
@@ -142,19 +143,17 @@ services:
       interval: 10s
       timeout: 5s
       retries: 12
-      start_period: 40s
+      start_period: 30s
 
   # ── Web (React / Nginx) ─────────────────────────────────────────────────────
   web:
     build:
-      context: ./web
+      context: ../web
       dockerfile: Dockerfile
     container_name: commuteiq-web
     restart: unless-stopped
-    environment:
-      VITE_GATEWAY_URL: ${VITE_GATEWAY_URL:-http://localhost:8080}
     ports:
-      - "3000:80"
+      - "3001:80"
     depends_on:
       gateway:
         condition: service_healthy
