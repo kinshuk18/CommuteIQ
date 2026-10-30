@@ -1,0 +1,31 @@
+type Query {
+    stopsNearby(lat: Float!, lon: Float!, radiusKm: Float, limit: Int): [Stop!]!
+    route(id: String!): Route
+    savedCommutes(userId: String!): [SavedCommute!]!
+}
+
+type Mutation {
+    saveCommute(userId: String!, originStopId: String!, destStopId: String!, label: String): SavedCommute!
+}
+
+type Stop {
+    stopId: String!
+    stopName: String!
+    stopLat: Float
+    stopLon: Float
+    wheelchairBoarding: Int
+}
+
+type Route {
+    routeId: String!
+    stopCount: Int!
+}
+
+type SavedCommute {
+    id: ID!
+    userId: String!
+    originStopId: String!
+    destStopId: String!
+    label: String
+    createdAt: String!
+}

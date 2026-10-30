@@ -51,3 +51,10 @@ CommuteIQ is a hybrid-work commute copilot for Bengaluru combining BMTC bus + Na
 - **Next:** Phase 4 — RAG + Agent (LLM strategy/factory, LlamaIndex ingestion over real docs, LangGraph multi-node workflow, ContextBuilder with verified vs unverified context, and `/ask` endpoint).
 - **Blockers:** Free Gemini/OpenAI API key needed for live LLM integration in Phase 4.
 - **Resume Command:** `cd "/home/kinshuk-gupta/KINSHUK GUPTA/Mini Project/CommuteIQ" && source .venv/bin/activate`
+
+---
+
+## Phase 5 Completed (Gateway — REST, GraphQL, Redis, Kafka, Security)
+- **Status:** Done & verified.
+- **Details:** 29 Java files compiled under Spring Boot 3.3.4 (Java 21). REST APIs for Stops, Offices, Plan, Assistant, Feedback, and Insights. GraphQL schema & datafetchers. Lua token-bucket rate limiter via Redis (failing open when unreachable). Shared secret filter.
+- **Verification:** `GatewayRestTest` passed 6/6 tests against in-memory H2 (Postgres mode) with external dependencies mocked; jar built at `services/gateway/target/gateway-0.1.0-SNAPSHOT.jar`.
